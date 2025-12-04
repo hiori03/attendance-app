@@ -11,7 +11,7 @@
 <body>
     <header class="header">
         <div class="header_logo-div">
-            <a href="/" class="header_logo-link">
+            <a href="/attendance" class="header_logo-link">
                 <img class="header_logo" src="{{ asset('images/logo.png') }}" alt="COACHTECH">
             </a>
         </div>

@@ -19,6 +19,7 @@ use App\Http\Controllers\Staff\ListController as StaffListController;
 */
 
 Route::get('/register', [AuthController::class, 'registerform']);
+Route::get('/login', [AuthController::class, 'loginform']);
 
 Route::get('/admin/attendance/list', [AdminListController::class, 'attendance_listform']);
 

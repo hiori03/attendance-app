@@ -18,8 +18,13 @@ use App\Http\Controllers\Staff\ListController as StaffListController;
 |
 */
 
-Route::get('/register', [AuthController::class, 'registerform']);
+Route::get('/register', [AuthController::class, 'registerform'])->name('registerform');
+Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/login', [AuthController::class, 'loginform']);
+
+Route::get('/email', [AuthController::class, 'emailform'])->name('email');
+Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'certification'])->middleware(['signed'])->name('email.certification');
+Route::post('/email/resend', [AuthController::class, 'resend'])->name('email.resend');
 
 Route::get('/admin/attendance/list', [AdminListController::class, 'attendance_listform']);
 

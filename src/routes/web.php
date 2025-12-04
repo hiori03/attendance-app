@@ -1,6 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Admin\ListController as AdminListController;
+use App\Http\Controllers\Admin\RequestController;
+use App\Http\Controllers\Staff\AttendanceController;
+use App\Http\Controllers\Staff\ListController as StaffListController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/register', [AuthController::class, 'registerform']);
+
+Route::get('/admin/attendance/list', [AdminListController::class, 'attendance_listform']);
+
+Route::get('/attendance', [AttendanceController::class, 'attendanceform']);

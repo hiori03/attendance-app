@@ -11,15 +11,15 @@
 <body>
     <header class="header">
         <div class="header_logo-div">
-            <a href="/admin/attendance/list" class="header_logo-link">
+            <a href="{{ route('admin.attendance.list.form') }}" class="header_logo-link">
                 <img class="header_logo" src="{{ asset('images/logo.png') }}" alt="COACHTECH">
             </a>
         </div>
         <div class="header_menu">
-            <a class="header_link" href="{{ url('/admin/attendance/list') }}">勤怠一覧</a>
-            <a class="header_link" href="{{ url('/admin/staff/list') }}">スタッフ一覧</a>
-            <a class="header_link" href="{{ url('/stamp_correction_request/list/list') }}">申請一覧</a>
-            <form class="header_logout-form" action="/logout" method="post">
+            <a class="header_link" href="{{ route('admin.attendance.list.form') }}">勤怠一覧</a>
+            <a class="header_link" href="{{ route('admin.staff.list.form') }}">スタッフ一覧</a>
+            <a class="header_link" href="{{ route('') }}">申請一覧</a>
+            <form class="header_logout-form" action="{{ route('logout') }}" method="post">
                 @csrf
                 <button class="header_logout">ログアウト</button>
             </form>

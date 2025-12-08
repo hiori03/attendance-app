@@ -1,5 +1,4 @@
 @component('mail::message')
-# メールアドレス確認
 
 こんにちは {{ $user->name }} さん。
 

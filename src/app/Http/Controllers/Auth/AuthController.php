@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegisterRequest;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\RegisterRequest;
+use App\Mail\VerifyEmail;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
-use App\Mail\VerifyEmail;
 
 class AuthController extends Controller
 {
-    public function registerform()
+    public function registerForm()
     {
-        return view('staff/register');
+        return view('staff.register');
     }
 
     public function register(RegisterRequest $request)
@@ -38,12 +37,12 @@ class AuthController extends Controller
         return redirect()->route('email');
     }
 
-    public function loginform()
+    public function loginForm()
     {
-        return view('staff/login');
+        return view('staff.login');
     }
 
-    public function emailform()
+    public function emailForm()
     {
         $userId = session('unverified_user_id');
 
@@ -53,7 +52,7 @@ class AuthController extends Controller
 
         $user = User::find($userId);
 
-        return view('staff/email', ['user' => $user]);
+        return view('staff.email', ['user' => $user]);
     }
 
     public function certification(Request $request, $id, $hash)
@@ -63,7 +62,7 @@ class AuthController extends Controller
         if ($user->email_verified_at) {
             Auth::login($user);
 
-            return redirect('/attendance');
+            return redirect()->route('attendance.form');
         }
 
         $user->email_verified_at = now();
@@ -73,10 +72,10 @@ class AuthController extends Controller
 
         session()->forget('unverified_user_id');
 
-        return redirect('/attendance');
+        return redirect()->route('attendance.form');
     }
 
-    public function resend(Request $request)
+    public function resend()
     {
         $userId = session('unverified_user_id');
 
@@ -89,7 +88,7 @@ class AuthController extends Controller
         if ($user->email_verified_at) {
             session()->forget('unverified_user_id');
 
-            return redirect('/attendance');
+            return redirect()->route('attendance.form');
         }
 
         $this->sendVerificationMail($user);
@@ -97,11 +96,11 @@ class AuthController extends Controller
         return back();
     }
 
-    public function sendVerificationMail(User $user)
+    private function sendVerificationMail(User $user)
     {
         $url = URL::temporarySignedRoute(
             'email.certification',
-            now()->addMinutes(60),
+            now()->addHour(),
             [
                 'id' => $user->id,
                 'hash' => sha1($user->email),

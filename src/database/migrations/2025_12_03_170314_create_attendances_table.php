@@ -19,7 +19,7 @@ class CreateAttendancesTable extends Migration
             $table->date('day');
             $table->time('work_start');
             $table->time('work_end')->nullable();
-            $table->enum('status', ['勤務外', '出勤中', '休憩中', '退勤済']);
+            $table->tinyInteger('status')->default(0);
             $table->timestamp('created_at')->useCurrent()->nullable();
             $table->timestamp('updated_at')->useCurrent()->nullable();
         });

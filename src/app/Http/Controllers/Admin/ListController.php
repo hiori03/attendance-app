@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class ListController extends Controller
 {
-    public function attendance_listform()
+    public function attendanceListForm()
     {
         return view('admin/attendance_list');
     }

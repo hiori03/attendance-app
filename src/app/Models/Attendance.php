@@ -17,6 +17,18 @@ class Attendance extends Model
         'status',
     ];
 
+    public const STATUS = [
+        0 => '出勤外',
+        1 => '出勤中',
+        2 => '休憩中',
+        3 => '退勤中',
+    ];
+
+    public function getStatusLabelAttribute()
+    {
+        return self::STATUS[$this->status] ?? '不明';
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

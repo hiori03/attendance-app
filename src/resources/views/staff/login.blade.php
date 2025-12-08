@@ -6,7 +6,7 @@
 @section('content')
     <div class="content">
         <h1 class="content_title">ログイン</h1>
-        <form action="/login" method="POST">
+        <form action="{{ route('login') }}" method="POST">
             @csrf
             <div class="content_form">
                 <p class="content_form-text">メールアドレス</p>
@@ -24,6 +24,6 @@
             </div>
             <button class="content_form-button">ログインする</button>
         </form>
-        <a href="/register" class="link_login">会員登録はこちら</a>
+        <a href="{{ route('register.form') }}" class="link_login">会員登録はこちら</a>
     </div>
 @endsection

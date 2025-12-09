@@ -17,6 +17,13 @@ class Attendance extends Model
         'status',
     ];
 
+    public const STATUS = [
+        0 => '出勤外',
+        1 => '出勤中',
+        2 => '休憩中',
+        3 => '退勤中',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -31,13 +38,6 @@ class Attendance extends Model
     {
         return $this->hasMany(Request::class);
     }
-
-        public const STATUS = [
-        0 => '出勤外',
-        1 => '出勤中',
-        2 => '休憩中',
-        3 => '退勤中',
-    ];
 
     public function getStatusLabelAttribute()
     {

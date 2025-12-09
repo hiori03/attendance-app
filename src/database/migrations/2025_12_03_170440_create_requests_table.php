@@ -20,7 +20,7 @@ class CreateRequestsTable extends Migration
             $table->time('new_work_start')->nullable();
             $table->time('new_work_end')->nullable();
             $table->text('text');
-            $table->enum('request_status', ['承認待ち', '承認済', '却下'])->default('承認待ち');
+            $table->tinyInteger('request_status')->default(0);
             $table->timestamp('created_at')->useCurrent()->nullable();
             $table->timestamp('updated_at')->useCurrent()->nullable();
         });

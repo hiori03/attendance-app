@@ -1,9 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\ListController as AdminListController;
-use App\Http\Controllers\Admin\RequestController;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Staff\AttendanceController;
 use App\Http\Controllers\Staff\ListController as StaffListController;
 
@@ -18,8 +17,27 @@ use App\Http\Controllers\Staff\ListController as StaffListController;
 |
 */
 
-Route::get('/register', [AuthController::class, 'registerform']);
+Route::get('/register', [AuthController::class, 'registerForm'])->name('register.form');
+Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::get('/login', [AuthController::class, 'loginForm'])->name('login.form');
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/admin/attendance/list', [AdminListController::class, 'attendance_listform']);
+Route::get('/email', [AuthController::class, 'emailForm'])->name('email');
+Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'certification'])->middleware(['signed'])->name('email.certification');
+Route::post('/email/resend', [AuthController::class, 'resend'])->name('email.resend');
 
-Route::get('/attendance', [AttendanceController::class, 'attendanceform']);
+Route::get('/admin/attendance/list', [AdminListController::class, 'attendanceListForm'])->name('admin.attendance.list.form');
+Route::get('/admin/staff/list', [AdminListController::class, 'staffListForm'])->name('admin.staff.list.form');
+
+Route::get('/attendance', [AttendanceController::class, 'attendanceForm'])->name('attendance.form');
+
+Route::get('/attendance/list', [StaffListController::class, 'attendanceListForm'])->name('attendance.list.form');
+
+Route::middleware(['auth', 'request.list'])->get('/stamp_correction_request/list', function (Request $request) {
+
+    $controller = $request->get('controller');
+
+    return app($controller)->requestForm();
+
+})->name('stamp_correction_request.form');

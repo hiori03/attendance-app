@@ -18,6 +18,11 @@ class Request extends Model
         'request_status',
     ];
 
+    public const REQUEST_STATUS = [
+        0 => '承認待ち',
+        1 => '承認済み',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -31,5 +36,10 @@ class Request extends Model
     public function newBreaks()
     {
         return $this->hasMany(NewBreak::class);
+    }
+
+    public function getRequestStatusLabelAttribute()
+    {
+        return self::REQUEST_STATUS[$this->request_status] ?? '不明';
     }
 }

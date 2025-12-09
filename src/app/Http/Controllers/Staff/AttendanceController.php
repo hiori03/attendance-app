@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
 {
-    public function attendanceform()
+    public function attendanceForm()
     {
         return view('staff/attendance');
     }

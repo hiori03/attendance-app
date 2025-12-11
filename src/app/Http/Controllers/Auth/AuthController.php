@@ -49,11 +49,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $credentials['email'])->first();
 
-        if (! $user) {
-            return back()->withErrors(['email' => 'ログイン情報が登録されていません'])->withInput();
-        }
-
-        if (! Hash::check($credentials['password'], $user->password)) {
+        if (! $user || ! Hash::check($credentials['password'], $user->password)) {
             return back()->withErrors(['email' => 'ログイン情報が登録されていません'])->withInput();
         }
 

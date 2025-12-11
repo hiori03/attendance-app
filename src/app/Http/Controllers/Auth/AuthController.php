@@ -42,6 +42,17 @@ class AuthController extends Controller
         return view('staff.login');
     }
 
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        $request->session()->forget('url.intended');
+
+        return redirect()->route('login');
+    }
+
     public function emailForm()
     {
         $userId = session('unverified_user_id');

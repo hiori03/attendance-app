@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Mail\VerifyEmail;
 use App\Models\User;
@@ -40,6 +41,30 @@ class AuthController extends Controller
     public function loginForm()
     {
         return view('staff.login');
+    }
+
+    public function login(LoginRequest $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        $user = User::where('email', $credentials['email'])->first();
+
+        if (! $user || ! Hash::check($credentials['password'], $user->password)) {
+            return back()->withErrors(['email' => 'ログイン情報が登録されていません'])->withInput();
+        }
+
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        if (! $user->email_verified_at) {
+            $this->sendVerificationMail($user);
+            session(['unverified_user_id' => $user->id]);
+            Auth::logout();
+
+            return redirect()->route('email');
+        }
+
+        return redirect()->route('attendance.form');
     }
 
     public function emailForm()

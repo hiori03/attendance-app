@@ -31,6 +31,10 @@ Route::get('/admin/attendance/list', [AdminListController::class, 'attendanceLis
 Route::get('/admin/staff/list', [AdminListController::class, 'staffListForm'])->name('admin.staff.list.form');
 
 Route::get('/attendance', [AttendanceController::class, 'attendanceForm'])->name('attendance.form');
+Route::post('/attendance/start', [AttendanceController::class, 'attendanceStart'])->name('attendance.start');
+Route::post('/attendance/end', [AttendanceController::class, 'attendanceEnd'])->name('attendance.end');
+Route::post('/attendance/break/start', [AttendanceController::class, 'breakStart'])->name('break.start');
+Route::post('/attendance/break/end', [AttendanceController::class, 'breakEnd'])->name('break.end');
 
 Route::get('/attendance/list', [StaffListController::class, 'attendanceListForm'])->name('attendance.list.form');
 

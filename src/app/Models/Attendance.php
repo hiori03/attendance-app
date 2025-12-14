@@ -18,10 +18,9 @@ class Attendance extends Model
     ];
 
     public const STATUS = [
-        0 => '出勤外',
-        1 => '出勤中',
-        2 => '休憩中',
-        3 => '退勤中',
+        0 => '出勤中',
+        1 => '休憩中',
+        2 => '退勤中',
     ];
 
     public function user()

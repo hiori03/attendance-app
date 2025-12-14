@@ -1,0 +1,69 @@
+body {
+    height: 100%;
+    margin: 0;
+    background-color: #f0eff2;
+}
+
+.content {
+    margin-top: 180px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.status {
+    font-size: 16px;
+    color: #696969;
+    background-color: #c8c8c8;
+    padding: 4px 18px;
+    height: 22px;
+    border-radius: 9999px;
+    flex-wrap: wrap;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.day {
+    font-size: 32px;
+    margin-bottom: 40px;
+}
+
+.clock {
+    font-size: 64px;
+    font-weight: bolder;
+    margin-bottom: 80px;
+}
+
+.attendance_button {
+    width: 160px;
+    padding: 12px 0;
+    font-size: 22px;
+    font-weight: bold;
+    border: none;
+    border-radius: 14px;
+    color: #fff;
+    background-color: #000;
+}
+
+.break_button{
+    width: 160px;
+    padding: 12px 0;
+    font-size: 22px;
+    font-weight: bold;
+    border: none;
+    border-radius: 14px;
+    color: #000;
+    background-color: #fff;
+}
+
+.button_position {
+    display: flex;
+    justify-content: center;
+    gap: 70px;
+}
+
+.message {
+    font-size: 22px;
+    font-weight: bold;
+}

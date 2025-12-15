@@ -5,19 +5,13 @@ namespace App\Http\Controllers\Staff;
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use App\Models\BreakRecord;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AttendanceController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth')->only(['attendanceForm']);
-    }
-
     public function attendanceForm()
     {
-        $attendance = Attendance::where('user_id', auth()->id())->where('day', now()->toDateString())->first();
+        $attendance = Attendance::todayForUser(auth()->id());
 
         return view('staff.attendance', compact('attendance'));
     }
@@ -27,11 +21,11 @@ class AttendanceController extends Controller
         Attendance::firstOrCreate(
             [
                 'user_id' => auth()->id(),
-                'day'     => now()->toDateString(),
+                'day' => now()->toDateString(),
             ],
             [
                 'work_start' => now()->format('H:i:s'),
-                'status'     => 0,
+                'status' => Attendance::STATUS_WORKING,
             ]
         );
 
@@ -40,9 +34,9 @@ class AttendanceController extends Controller
 
     public function attendanceEnd()
     {
-        Attendance::where('user_id', Auth::id())->where('day', today())->update([
+        Attendance::where('user_id', auth()->id())->where('day', today())->update([
             'work_end' => now()->format('H:i:s'),
-            'status' => 2,
+            'status' => Attendance::STATUS_FINISHED,
         ]);
 
         return redirect()->route('attendance.form');
@@ -50,10 +44,10 @@ class AttendanceController extends Controller
 
     public function breakStart()
     {
-        $attendance = Attendance::where('user_id', Auth::id())->where('day', today())->first();
+        $attendance = Attendance::todayForUser(auth()->id());
 
         $attendance->update([
-            'status' => 1,
+            'status' => Attendance::STATUS_BREAK,
         ]);
 
         BreakRecord::create([
@@ -66,10 +60,10 @@ class AttendanceController extends Controller
 
     public function breakEnd()
     {
-        $attendance = Attendance::where('user_id', Auth::id())->where('day', today())->first();
+        $attendance = Attendance::todayForUser(auth()->id());
 
         $attendance->update([
-            'status' => 0,
+            'status' => Attendance::STATUS_WORKING,
         ]);
 
         $breakRecord = BreakRecord::where('attendance_id', $attendance->id)->whereNull('break_end')->latest()->first();

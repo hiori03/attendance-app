@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ListController as AdminListController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Staff\AttendanceController;
 use App\Http\Controllers\Staff\ListController as StaffListController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,21 +27,23 @@ Route::get('/email', [AuthController::class, 'emailForm'])->name('email');
 Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'certification'])->middleware(['signed'])->name('email.certification');
 Route::post('/email/resend', [AuthController::class, 'resend'])->name('email.resend');
 
-Route::get('/admin/attendance/list', [AdminListController::class, 'attendanceListForm'])->name('admin.attendance.list.form');
-Route::get('/admin/staff/list', [AdminListController::class, 'staffListForm'])->name('admin.staff.list.form');
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/attendance/list', [AdminListController::class, 'attendanceListForm'])->name('admin.attendance.list.form');
+    Route::get('/admin/staff/list', [AdminListController::class, 'staffListForm'])->name('admin.staff.list.form');
 
-Route::get('/attendance', [AttendanceController::class, 'attendanceForm'])->name('attendance.form');
-Route::post('/attendance/start', [AttendanceController::class, 'attendanceStart'])->name('attendance.start');
-Route::post('/attendance/end', [AttendanceController::class, 'attendanceEnd'])->name('attendance.end');
-Route::post('/attendance/break/start', [AttendanceController::class, 'breakStart'])->name('break.start');
-Route::post('/attendance/break/end', [AttendanceController::class, 'breakEnd'])->name('break.end');
+    Route::get('/attendance', [AttendanceController::class, 'attendanceForm'])->name('attendance.form');
+    Route::post('/attendance/start', [AttendanceController::class, 'attendanceStart'])->name('attendance.start');
+    Route::post('/attendance/end', [AttendanceController::class, 'attendanceEnd'])->name('attendance.end');
+    Route::post('/attendance/break/start', [AttendanceController::class, 'breakStart'])->name('break.start');
+    Route::post('/attendance/break/end', [AttendanceController::class, 'breakEnd'])->name('break.end');
 
-Route::get('/attendance/list', [StaffListController::class, 'attendanceListForm'])->name('attendance.list.form');
+    Route::get('/attendance/list', [StaffListController::class, 'attendanceListForm'])->name('attendance.list.form');
 
-Route::middleware(['auth', 'request.list'])->get('/stamp_correction_request/list', function (Request $request) {
+    Route::middleware(['auth', 'request.list'])->get('/stamp_correction_request/list', function (Request $request) {
 
-    $controller = $request->get('controller');
+        $controller = $request->get('controller');
 
-    return app($controller)->requestForm();
+        return app($controller)->requestForm();
 
-})->name('stamp_correction_request.form');
+    })->name('stamp_correction_request.form');
+});

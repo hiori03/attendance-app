@@ -7,11 +7,11 @@
     <div class="content">
         @if (!$attendance)
             <p class="status">勤務外</p>
-        @elseif ($attendance->status === 0)
+        @elseif ($attendance->status === \App\Models\Attendance::STATUS_WORKING)
             <p class="status">出勤中</p>
-        @elseif ($attendance->status === 1)
+        @elseif ($attendance->status === \App\Models\Attendance::STATUS_BREAK)
             <p class="status">休憩中</p>
-        @elseif ($attendance->status === 2)
+        @elseif ($attendance->status === \App\Models\Attendance::STATUS_FINISHED)
             <p class="status">退勤済</p>
         @endif
         <p class="day" id="date"></p>
@@ -22,7 +22,7 @@
                 @csrf
                 <button class="attendance_button" type="submit">出勤</button>
             </form>
-        @elseif ($attendance->status === 0)
+        @elseif ($attendance->status === \App\Models\Attendance::STATUS_WORKING)
             <div class="button_position">
                 <form method="POST" action="{{ route('attendance.end') }}">
                     @csrf
@@ -33,12 +33,12 @@
                     <button class="break_button" type="submit">休憩入</button>
                 </form>
             </div>
-        @elseif ($attendance->status === 1)
+        @elseif ($attendance->status === \App\Models\Attendance::STATUS_BREAK)
             <form method="POST" action="{{ route('break.end') }}">
                 @csrf
                 <button class="break_button" type="submit">休憩戻</button>
             </form>
-        @elseif ($attendance->status === 2)
+        @elseif ($attendance->status === \App\Models\Attendance::STATUS_FINISHED)
             <p class="message">お疲れ様でした。</p>
         @endif
     </div>

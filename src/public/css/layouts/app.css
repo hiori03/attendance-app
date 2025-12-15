@@ -1,3 +1,9 @@
+.page_color {
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f0eff2;
+}
+
 .header {
     margin: 0 auto;
     background-color: #000;
@@ -72,5 +78,4 @@
     .header_logout {
         font-size: 16px;
     }
-
 }

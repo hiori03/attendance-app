@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Staff;
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use App\Models\BreakRecord;
-use Illuminate\Support\Facades\Auth;
 
 class AttendanceController extends Controller
 {

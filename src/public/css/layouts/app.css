@@ -1,6 +1,10 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
 .page_color {
     min-height: 100vh;
-    margin: 0;
     background-color: #f0eff2;
 }
 

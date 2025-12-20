@@ -1,11 +1,6 @@
-html, body {
-    height: 100%;
-    margin: 0;
-}
-
 .page_color {
     min-height: 100vh;
-    background-color: #f0eff2;
+    background: #f0eff2;
 }
 
 .header {

@@ -111,4 +111,16 @@ class Attendance extends Model
             ->where('day', today())
             ->first();
     }
+
+    public static function getByUserAndMonth(
+        int $userId,
+        Carbon $start,
+        Carbon $end
+    ) {
+        return self::with('breakRecords')
+            ->where('user_id', $userId)
+            ->whereBetween('day', [$start, $end])
+            ->get()
+            ->keyBy('day');
+    }
 }

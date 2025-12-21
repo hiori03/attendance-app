@@ -4,8 +4,8 @@ use App\Http\Controllers\Admin\ListController as AdminListController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Staff\AttendanceController;
 use App\Http\Controllers\Staff\ListController as StaffListController;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +39,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/attendance/break/end', [AttendanceController::class, 'breakEnd'])->name('break.end');
 
     Route::get('/attendance/list', [StaffListController::class, 'attendanceListForm'])->name('attendance.list.form');
+    Route::post('/attendance/list/change', [StaffListController::class, 'changeMonth'])->name('attendance.list.changeMonth');
+
+    Route::post('/attendance/detail/prepare', [StaffListController::class, 'prepareDetail'])->name('attendance.detail.prepare');
+
+    Route::get('/attendance/detail/{id}', [StaffListController::class, 'attendanceDetailForm'])->name('attendance.detail.form');
 
     Route::middleware(['auth', 'request.list'])->get('/stamp_correction_request/list', function (Request $request) {
 

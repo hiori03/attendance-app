@@ -1,7 +1,6 @@
 .page_color {
     min-height: 100vh;
-    margin: 0;
-    background-color: #f0eff2;
+    background: #f0eff2;
 }
 
 .header {

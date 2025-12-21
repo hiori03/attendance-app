@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\BreakRecord;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -32,7 +34,7 @@ class Attendance extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function break_records()
+    public function breakRecords()
     {
         return $this->hasMany(BreakRecord::class);
     }
@@ -47,10 +49,78 @@ class Attendance extends Model
         return self::STATUS[$this->status] ?? '不明';
     }
 
+    public function getWorkStartHmAttribute()
+    {
+        return $this->work_start
+            ? Carbon::parse($this->work_start)->format('H:i')
+            : null;
+    }
+
+    public function getWorkEndHmAttribute()
+    {
+        return $this->work_end
+            ? Carbon::parse($this->work_end)->format('H:i')
+            : null;
+    }
+
+    public function getTotalBreakSecondsAttribute()
+    {
+        return $this->breakRecords->sum(function ($break) {
+            if (!$break->break_end) {
+                return 0;
+            }
+
+            return Carbon::parse($break->break_start)
+                ->diffInSeconds(Carbon::parse($break->break_end));
+        });
+    }
+
+    public function getBreakTimeHmAttribute()
+    {
+        if ($this->total_break_seconds <= 0) {
+            return '';
+        }
+
+        return gmdate('H:i', $this->total_break_seconds);
+    }
+
+    public function getTotalWorkTimeHmAttribute()
+    {
+        if (!$this->work_start || !$this->work_end) {
+            return '';
+        }
+
+        $workSeconds = Carbon::parse($this->work_start)
+            ->diffInSeconds(Carbon::parse($this->work_end));
+
+        $actualWorkSeconds = $workSeconds - $this->total_break_seconds;
+
+        if ($actualWorkSeconds <= 0) {
+            return '00:00';
+        }
+
+        $hours = floor($actualWorkSeconds / 3600);
+        $minutes = floor(($actualWorkSeconds % 3600) / 60);
+
+        return sprintf('%02d:%02d', $hours, $minutes);
+    }
+
     public static function todayForUser(int $userId): ?self
     {
         return self::where('user_id', $userId)
             ->where('day', today())
             ->first();
+    }
+
+    public static function getByUserAndMonth(
+        int $userId,
+        Carbon $start,
+        Carbon $end
+    ) {
+        return self::with('breakRecords')
+            ->where('user_id', $userId)
+            ->whereBetween('day', [$start, $end])
+            ->get()
+            ->keyBy('day');
     }
 }

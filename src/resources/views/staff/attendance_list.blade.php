@@ -15,7 +15,7 @@
             </button>
         </form>
         <div class="month_display">
-            <img src="/images/calendar-icon.png" alt="カレンダー" class="calendar_icon">
+            <img src="{{ asset('images/calendar-icon.png') }}" alt="カレンダー" class="calendar_icon">
             <p class="month_text">{{ $displayMonth }}</p>
         </div>
         <form method="POST" action="{{ route('attendance.list.changeMonth') }}">
@@ -36,43 +36,33 @@
                 <th class="tag_th">合計</th>
                 <th class="detail_th">詳細</th>
             </tr>
-            @php
-            $date = $startOfMonth->copy();
-            @endphp
-            @while ($date <= $endOfMonth)
-                @php
-                $attendance=$attendances[$date->toDateString()] ?? null;
-                @endphp
-
-                <tr class="tbody_tr">
-                    <td class="day_td">
-                        {{ $date->locale('ja')->isoFormat('MM/DD(ddd)') }}
-                    </td>
-                    <td class="tag_td">
-                        {{ $attendance?->work_start_hm ?? '' }}
-                    </td>
-                    <td class="tag_td">
-                        {{ $attendance?->work_end_hm ?? '' }}
-                    </td>
-                    <td class="tag_td">
-                        {{ $attendance?->break_time_hm ?? '' }}
-                    </td>
-                    <td class="tag_td">
-                        {{ $attendance?->total_work_time_hm ?? '' }}
-                    </td>
-                    <td class="detail_td">
-                        <form method="POST" action="{{ route('attendance.detail.prepare') }}">
-                            @csrf
-                            <input type="hidden" name="attendance_id" value="{{ $attendance?->id ?? 0 }}">
-                            <input type="hidden" name="date" value="{{ $date->toDateString() }}">
-                            <button type="submit" class="detail_button">詳細</button>
-                        </form>
-                    </td>
-                </tr>
-                @php
-                $date->addDay();
-                @endphp
-                @endwhile
+            @foreach ($days as $day)
+            <tr class="tbody_tr">
+                <td class="day_td">
+                    {{ $day['date']->locale('ja')->isoFormat('MM/DD(ddd)') }}
+                </td>
+                <td class="tag_td">
+                    {{ $day['attendance']?->work_start_hm ?? '' }}
+                </td>
+                <td class="tag_td">
+                    {{ $day['attendance']?->work_end_hm ?? '' }}
+                </td>
+                <td class="tag_td">
+                    {{ $day['attendance']?->break_time_hm ?? '' }}
+                </td>
+                <td class="tag_td">
+                    {{ $day['attendance']?->total_work_time_hm ?? '' }}
+                </td>
+                <td class="detail_td">
+                    <form method="POST" action="{{ route('attendance.detail.prepare') }}">
+                        @csrf
+                        <input type="hidden" name="attendance_id" value="{{ $day['attendance']?->id ?? 0 }}">
+                        <input type="hidden" name="date" value="{{ $day['date']->toDateString() }}">
+                        <button type="submit" class="detail_button">詳細</button>
+                    </form>
+                </td>
+            </tr>
+            @endforeach
         </table>
     </div>
 </div>

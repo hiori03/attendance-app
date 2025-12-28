@@ -23,18 +23,29 @@ class ListController extends Controller
 
         $displayMonth = $startOfMonth->format('Y/m');
 
-        $attendances = Attendance::with('breakRecords')
-            ->where('user_id', auth()->id())
-            ->whereBetween('day', [$startOfMonth, $endOfMonth])
-            ->get()
-            ->keyBy('day');
+        $attendances = Attendance::getByUserAndMonth(
+            auth()->id(),
+            $startOfMonth,
+            $endOfMonth
+        );
+
+        $days = [];
+        $date = $startOfMonth->copy();
+
+        while ($date <= $endOfMonth) {
+            $days[] = [
+                'date'       => $date->copy(),
+                'attendance' => $attendances[$date->toDateString()] ?? null,
+            ];
+            $date->addDay();
+        }
 
         return view('staff.attendance_list', compact(
             'month',
             'startOfMonth',
             'endOfMonth',
             'displayMonth',
-            'attendances'
+            'days'
         ));
     }
 

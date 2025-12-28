@@ -186,5 +186,66 @@
 }
 
 @media screen and (max-width: 1024px) {
+    .page_title {
+        font-size: 20px;
+        margin-bottom: 30px;
+    }
+
+    .page_title::before {
+        width: 4px;
+        height: 22px;
+        margin-right: 8px;
+    }
+
+    .detail_tr {
+        font-size: 13px;
+    }
+
+    .detail_th {
+        width: 20%;
+        padding: 20px 0 20px 40px;
+    }
+
+    .name_td,
+    .day_td,
+    .detail_td,
+    .remarks_td {
+        width: 80%;
+        padding: 20px 40px 20px 0px;
+    }
+
+    .time_text {
+        font-size: 13px;
+    }
+
+    .time_input {
+        font-size: 13px;
+    }
+
+    .remarks_textarea {
+        font-size: 13px;
+    }
+
+    .remarks_text {
+        font-size: 13px;
+    }
+
+    .detail_button {
+        padding: 6px 34px;
+        font-size: 15px;
+    }
+
+    .request_message {
+        font-size: 14px;
+    }
+
+    .error_message {
+        font-size: 1vw;
+    }
+
+    .error_textarea {
+        font-size: 1vw;
+    }
+
     
 }

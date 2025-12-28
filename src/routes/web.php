@@ -42,8 +42,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/attendance/list/change', [StaffListController::class, 'changeMonth'])->name('attendance.list.changeMonth');
 
     Route::post('/attendance/detail/prepare', [StaffListController::class, 'prepareDetail'])->name('attendance.detail.prepare');
-
     Route::get('/attendance/detail/{id}', [StaffListController::class, 'attendanceDetailForm'])->name('attendance.detail.form');
+    Route::post('/attendance/detail/request',[StaffListController::class, 'DetailRequest'])->name('attendance.detail.request');
 
     Route::middleware(['auth', 'request.list'])->get('/stamp_correction_request/list', function (Request $request) {
 

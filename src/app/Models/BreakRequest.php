@@ -2,21 +2,23 @@
 
 namespace App\Models;
 
+use App\Models\AttendanceRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class NewBreak extends Model
+class BreakRequest extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'request_id',
+        'attendance_request_id',
+        'request_day',
         'new_break_start',
         'new_break_end',
     ];
 
-    public function request()
+    public function attendanceRequests()
     {
-        return $this->belongsTo(Request::class);
+        return $this->belongsTo(AttendanceRequest::class);
     }
 }

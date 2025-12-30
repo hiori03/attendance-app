@@ -75,7 +75,7 @@ class AuthController extends Controller
 
         $request->session()->forget('url.intended');
 
-        return redirect()->route('login');
+        return redirect()->route('login.form');
     }
 
     public function adminLoginForm()
@@ -101,6 +101,17 @@ class AuthController extends Controller
         $request->session()->regenerate();
 
         return redirect()->route('admin.attendance.list.form');
+    }
+
+    public function adminLogout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        $request->session()->forget('url.intended');
+
+        return redirect()->route('admin.login.form');
     }
 
     public function emailForm()

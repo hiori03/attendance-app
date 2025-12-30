@@ -18,8 +18,8 @@ class ListController extends Controller
         $month = session('attendance_month', now()->format('Y-m'));
         $carbonMonth = Carbon::createFromFormat('Y-m', $month);
 
-        $startOfMonth = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
-        $endOfMonth   = $startOfMonth->copy()->endOfMonth();
+        $startOfMonth = Carbon::create($month . '-01')->startOfMonth();
+        $endOfMonth   = (clone $startOfMonth)->endOfMonth();
 
         $displayMonth = $startOfMonth->format('Y/m');
 
@@ -52,7 +52,7 @@ class ListController extends Controller
     public function changeMonth(Request $request)
     {
         $month = session('attendance_month', now()->format('Y-m'));
-        $carbonMonth = Carbon::createFromFormat('Y-m', $month);
+        $carbonMonth = Carbon::create($month . '-01');
 
         if ($request->input('action') === 'prev') {
             $carbonMonth->subMonth();
@@ -168,5 +168,22 @@ class ListController extends Controller
         }
 
         return redirect()->route('attendance.detail.form', ['id' => $attendance?->id ?? 0]);
+    }
+
+    public function requestForm(Request $request)
+    {
+        $status = $request->query('status', 'pending');
+
+        $query = AttendanceRequest::query();
+
+        if ($status === 'approved') {
+            $query->where('request_status', AttendanceRequest::REQUEST_STATUS_APPROVED);
+        } else {
+            $query->where('request_status', AttendanceRequest::REQUEST_STATUS_PENDING);
+        }
+
+        $requests = $query->get();
+
+        return view('staff.request',compact('requests', 'status'));
     }
 }

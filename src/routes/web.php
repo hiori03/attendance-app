@@ -49,7 +49,7 @@ Route::middleware('auth')->group(function () {
 
         $controller = $request->get('controller');
 
-        return app($controller)->requestForm();
+        return app($controller)->requestForm($request);
 
     })->name('stamp_correction_request.form');
 });

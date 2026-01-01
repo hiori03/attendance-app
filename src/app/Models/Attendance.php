@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\AttendanceRequest;
 use App\Models\BreakRecord;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -39,9 +40,9 @@ class Attendance extends Model
         return $this->hasMany(BreakRecord::class);
     }
 
-    public function requests()
+    public function attendanceRequests()
     {
-        return $this->hasMany(Request::class);
+        return $this->hasMany(AttendanceRequest::class);
     }
 
     public function getStatusLabelAttribute()

@@ -12,6 +12,7 @@ class AttendanceRequest extends Model
     protected $fillable = [
         'user_id',
         'attendance_id',
+        'request_day',
         'new_work_start',
         'new_work_end',
         'text',
@@ -26,19 +27,14 @@ class AttendanceRequest extends Model
         self::REQUEST_STATUS_APPROVED => '承認済み',
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function attendance()
     {
         return $this->belongsTo(Attendance::class);
     }
 
-    public function newBreaks()
+    public function breakRequests()
     {
-        return $this->hasMany(NewBreak::class);
+        return $this->hasMany(BreakRequest::class);
     }
 
     public function getRequestStatusLabelAttribute()

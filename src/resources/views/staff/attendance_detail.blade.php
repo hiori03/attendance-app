@@ -8,7 +8,7 @@
     <h2 class="page_title">勤怠詳細</h2>
     <form method="POST" action="{{ route('attendance.detail.request') }}">
         @csrf
-        <input type="hidden" name="date" value="{{ $date->format('Y-m-d') }}">
+            <input type="hidden" name="date" value="{{ $date->format('Y-m-d') }}">
         @if ($attendance)
             <input type="hidden" name="attendance_id" value="{{ $attendance->id }}">
         @endif
@@ -59,24 +59,24 @@
                         <div class="list_error">
                             <div class="list_position">
                                 @error('work_start')
-                                <p class="error_message">{{ $message }}</p>
+                                    <p class="error_message">{{ $message }}</p>
                                 @enderror
                             </div>
                             <div class="list_position">
                                 @error('work_end')
-                                <p class="error_message">{{ $message }}</p>
+                                    <p class="error_message">{{ $message }}</p>
                                 @enderror
                             </div>
                     </td>
                 </tr>
-                @foreach ($breakRows as $row)
+                @foreach ($breakRows as $index => $row)
                     <tr class="detail_tr">
                         <th class="detail_th">{{ $row['label'] }}</th>
                         <td class="detail_td">
                             <div class="list_time">
                                 <div class="list_position">
                                     @if ($canEdit)
-                                        <input class="time_input" type="text" name="breaks[{{ $row['index'] }}][start]" value="{{ old("breaks.{$row['index']}.start", $row['start']) }}">
+                                        <input class="time_input" type="text" name="breaks[{{ $index }}][start]" value="{{ old('breaks.' . $index . '.start', $row['start']) }}">
                                     @else
                                         <p class="time_text">
                                             {{ $row['start'] }}
@@ -86,7 +86,7 @@
                                 <div class="list_interval">〜</div>
                                 <div class="list_position">
                                     @if ($canEdit)
-                                        <input class="time_input" type="text" name="breaks[{{ $row['index'] }}][end]" value="{{ old("breaks.{$row['index']}.end", $row['end']) }}">
+                                        <input class="time_input" type="text" name="breaks[{{ $index }}][end]" value="{{ old('breaks.' . $index . '.end', $row['end']) }}">
                                     @else
                                         <p class="time_text">
                                             {{ $row['end'] }}
@@ -96,12 +96,12 @@
                             </div>
                             <div class="list_error">
                                 <div class="list_position">
-                                    @foreach ($errors->get("breaks.{$row['index']}.start") as $message)
+                                    @foreach ($errors->get('breaks.' . $index . '.start') as $message)
                                         <p class="error_message">{{ $message }}</p>
                                     @endforeach
                                 </div>
                                 <div class="list_position">
-                                    @foreach ($errors->get("breaks.{$row['index']}.end") as $message)
+                                    @foreach ($errors->get('breaks.' . $index . '.end') as $message)
                                         <p class="error_message">{{ $message }}</p>
                                     @endforeach
                                 </div>
@@ -114,9 +114,9 @@
                     <td class="remarks_td">
                         @if ($canEdit)
                             <textarea class="remarks_textarea" name="text" rows="3">{{ old('text', $attendance?->text) }}</textarea>
-                        @error('text')
-                            <p class="error_textarea">{{ $message }}</p>
-                        @enderror
+                            @error('text')
+                                <p class="error_textarea">{{ $message }}</p>
+                            @enderror
                         @else
                             <p class="remarks_text">
                                 {{ $attendanceRequest->text }}

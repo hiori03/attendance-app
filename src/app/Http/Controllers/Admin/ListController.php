@@ -61,20 +61,37 @@ class ListController extends Controller
         return redirect()->route('admin.attendance.list.form');
     }
 
-    public function adminAttendanceDetailForm(int $id)
+    public function adminAttendanceDetailForm(Request $request, $id = null)
     {
-        $attendance = Attendance::with(['breakRecords', 'user'])->findOrFail($id);
+        $attendance = null;
+        $attendanceRequest = null;
+        $breakRecords = collect();
 
-        $user = $attendance->user;
-        $date = Carbon::parse($attendance->day);
+        $date = Carbon::parse($request->query('date'));
 
-        $attendanceRequest = AttendanceRequest::where('attendance_id', $attendance->id)->where('request_status', AttendanceRequest::REQUEST_STATUS_PENDING)->latest()->first();
+        if ($id) {
+            $attendance = Attendance::with(['breakRecords', 'user'])->find($id);
 
-        $canEdit = !($attendanceRequest && $attendanceRequest->request_status === AttendanceRequest::REQUEST_STATUS_PENDING);
+            if ($attendance) {
+                $breakRecords = $attendance->breakRecords;
+                $attendanceRequest = AttendanceRequest::where('attendance_id', $attendance->id)
+                    ->where('request_status', AttendanceRequest::REQUEST_STATUS_PENDING)
+                    ->latest()
+                    ->first();
+            }
+        } else {
+            $attendanceRequest = AttendanceRequest::whereNull('attendance_id')
+                ->where('request_day', $date->toDateString())
+                ->where('request_status', AttendanceRequest::REQUEST_STATUS_PENDING)
+                ->latest()
+                ->first();
+        }
+
+        $canEdit = !(
+            $attendanceRequest && $attendanceRequest->request_status === AttendanceRequest::REQUEST_STATUS_PENDING
+        );
 
         $breakRows = [];
-
-        $breakRecords = $attendance->breakRecords;
         $total = $breakRecords->count();
 
         if ($canEdit) {
@@ -82,15 +99,17 @@ class ListController extends Controller
         }
 
         for ($i = 0; $i < $total; $i++) {
-            $breakRecord = $breakRecords->get($i);
+            $break = $breakRecords->get($i);
 
             $breakRows[] = [
                 'index' => $i,
                 'label' => $i === 0 ? '休憩' : '休憩' . ($i + 1),
-                'start' => $breakRecord ? $breakRecord->start_hm : '',
-                'end'   => $breakRecord ? $breakRecord->end_hm : '',
+                'start' => $break?->start_hm ?? '',
+                'end' => $break?->end_hm ?? '',
             ];
         }
+
+        $user = $attendance?->user;
 
         return view('admin.attendance_detail', compact(
             'user',

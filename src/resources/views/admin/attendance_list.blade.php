@@ -54,7 +54,7 @@
                     {{ $day['attendance']?->total_work_time_hm ?? '' }}
                 </td>
                 <td class="detail_td">
-                    <a href="{{ route('admin.attendance.detail.form', $day['attendance']->id) }}" class="detail_button">
+                    <a href="{{ route('admin.attendance.detail.form', ['id' => $day['attendance']?->id]) }}" class="detail_button">
                         詳細
                     </a>
                 </td>

@@ -148,8 +148,55 @@ class ListController extends Controller
         return view('admin.staff_list', compact('users'));
     }
 
-    public function atttendanceStaffForm()
+    public function adminAtttendanceStaffForm($id)
     {
-        return view('admin.attendance_staff');
+        $user = User::findOrFail($id);
+
+        $month = session('attendance_month', now()->format('Y-m'));
+        $carbonMonth = Carbon::createFromFormat('Y-m', $month);
+
+        $startOfMonth = $carbonMonth->copy()->startOfMonth();
+        $endOfMonth   = $carbonMonth->copy()->endOfMonth();
+
+        $displayMonth = $startOfMonth->format('Y/m');
+
+        $attendances = Attendance::getByUserAndMonth(
+            $user->id,
+            $startOfMonth,
+            $endOfMonth
+        );
+
+        $days = [];
+        $date = $startOfMonth->copy();
+
+        while ($date <= $endOfMonth) {
+            $days[] = [
+                'date'       => $date->copy(),
+                'attendance' => $attendances[$date->toDateString()] ?? null,
+            ];
+            $date->addDay();
+        }
+
+        return view('admin.attendance_staff', compact(
+            'user',
+            'displayMonth',
+            'days'
+        ));
+    }
+
+    public function adminChangeMonth(Request $request, $id)
+    {
+        $month = session('attendance_month', now()->format('Y-m'));
+        $carbonMonth = Carbon::create($month . '-01');
+
+        if ($request->input('action') === 'prev') {
+            $carbonMonth->subMonth();
+        } elseif ($request->input('action') === 'next') {
+            $carbonMonth->addMonth();
+        }
+
+        session(['attendance_month' => $carbonMonth->format('Y-m')]);
+
+        return redirect()->route('admin.attendance.staff.form', ['id' => $id,]);
     }
 }

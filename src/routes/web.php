@@ -41,7 +41,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/admin/staff/list', [AdminListController::class, 'staffListForm'])->name('admin.staff.list.form');
 
-    Route::get('/admin/attendance/staff/{id}', [AdminListController::class, 'atttendanceStaffForm'])->name('admin.attendance.staff.form');
+    Route::get('/admin/attendance/staff/{id}', [AdminListController::class, 'adminAtttendanceStaffForm'])->name('admin.attendance.staff.form');
+    Route::post('/admin/attendance/staff/{id}/change', [AdminListController::class, 'adminChangeMonth'])->name('admin.attendance.staff.changeMonth');
 
     Route::get('/attendance', [AttendanceController::class, 'attendanceForm'])->name('attendance.form');
     Route::post('/attendance/start', [AttendanceController::class, 'attendanceStart'])->name('attendance.start');

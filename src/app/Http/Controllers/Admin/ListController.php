@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AttendanceDetailRequest;
 use App\Models\Attendance;
 use App\Models\AttendanceRequest;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -138,5 +139,17 @@ class ListController extends Controller
         });
 
         return redirect()->route('admin.attendance.detail.form', ['id' => $attendance->id]);
+    }
+
+    public function staffListForm()
+    {
+        $users = User::all();
+
+        return view('admin.staff_list', compact('users'));
+    }
+
+    public function atttendanceStaffForm()
+    {
+        return view('admin.attendance_staff');
     }
 }

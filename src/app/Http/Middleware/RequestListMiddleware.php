@@ -20,7 +20,7 @@ class RequestListMiddleware
     {
         $user = auth()->user();
 
-        if ($user->hasRole('admin')) {
+        if ($user->role === 'admin') {
             $request->merge(['controller' => AdminListController::class]);
         } else {
             $request->merge(['controller' => StaffListController::class]);

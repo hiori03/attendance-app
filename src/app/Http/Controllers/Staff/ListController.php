@@ -18,8 +18,8 @@ class ListController extends Controller
         $month = session('attendance_month', now()->format('Y-m'));
         $carbonMonth = Carbon::createFromFormat('Y-m', $month);
 
-        $startOfMonth = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
-        $endOfMonth   = $startOfMonth->copy()->endOfMonth();
+        $startOfMonth = $carbonMonth->copy()->startOfMonth();
+        $endOfMonth = $carbonMonth->copy()->endOfMonth();
 
         $displayMonth = $startOfMonth->format('Y/m');
 
@@ -52,7 +52,7 @@ class ListController extends Controller
     public function changeMonth(Request $request)
     {
         $month = session('attendance_month', now()->format('Y-m'));
-        $carbonMonth = Carbon::createFromFormat('Y-m', $month);
+        $carbonMonth = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
 
         if ($request->input('action') === 'prev') {
             $carbonMonth->subMonth();
@@ -71,38 +71,35 @@ class ListController extends Controller
             'attendance_date' => $request->input('date'),
         ]);
 
-        return redirect()->route('attendance.detail.form', [
-            'id' => $request->input('attendance_id')
-        ]);
+        $id = $request->input('attendance_id');
+
+        return redirect()->route('attendance.detail.form', $id ? ['id' => $id] : []);
     }
 
-    public function attendanceDetailForm($id, Request $request)
+    public function attendanceDetailForm(Request $request, $id = null)
     {
         $user = auth()->user();
 
-        $date = Carbon::parse(session('attendance_date'));
+        $attendanceDate = session('attendance_date');
+
+        if (!$attendanceDate) {
+            return redirect()->route('attendance.list.form');
+        }
+
+        $date = Carbon::parse($attendanceDate);
 
         $attendance = null;
         $breakRecords = collect();
         $attendanceRequest = null;
 
-        if ($id != 0) {
+        if (!is_null($id)) {
             $attendance = Attendance::with('breakRecords')->find($id);
 
             if ($attendance) {
-                $breakRecords = $attendance->breakRecords;
-
-                $attendanceRequest = AttendanceRequest::where('attendance_id', $attendance->id)
-                    ->where('request_status', AttendanceRequest::REQUEST_STATUS_PENDING)
-                    ->latest()
-                    ->first();
+                $attendanceRequest = AttendanceRequest::getLatestPendingByAttendance($attendance);
             }
         } else {
-            $attendanceRequest = AttendanceRequest::where('user_id', auth()->id())
-                ->where('request_day', $date->toDateString())
-                ->where('request_status', AttendanceRequest::REQUEST_STATUS_PENDING)
-                ->latest()
-                ->first();
+            $attendanceRequest = AttendanceRequest::getLatestPendingByUserAndDate(auth()->id(), $date->toDateString());
         }
 
         $canEdit = !(
@@ -119,7 +116,6 @@ class ListController extends Controller
 
         for ($i = 0; $i < $total; $i++) {
             $breakRows[] = [
-                'index' => $i,
                 'label' => $i === 0 ? '休憩' : '休憩' . ($i + 1),
                 'start' => $breakRecords[$i]->start_hm ?? '',
                 'end' => $breakRecords[$i]->end_hm ?? '',
@@ -167,6 +163,23 @@ class ListController extends Controller
             ]);
         }
 
-        return redirect()->route('attendance.detail.form', ['id' => $attendance?->id ?? 0]);
+        return redirect()->route('attendance.detail.form', $attendance ? ['id' => $attendance->id] : []);
+    }
+
+    public function requestForm(Request $request)
+    {
+        $status = $request->query('status', 'pending');
+
+        $query = AttendanceRequest::query();
+
+        if ($status === 'approved') {
+            $query->where('request_status', AttendanceRequest::REQUEST_STATUS_APPROVED);
+        } else {
+            $query->where('request_status', AttendanceRequest::REQUEST_STATUS_PENDING);
+        }
+
+        $requests = $query->get();
+
+        return view('staff.request',compact('requests', 'status'));
     }
 }

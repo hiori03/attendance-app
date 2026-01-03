@@ -27,6 +27,11 @@ class AttendanceRequest extends Model
         self::REQUEST_STATUS_APPROVED => '承認済み',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function attendance()
     {
         return $this->belongsTo(Attendance::class);
@@ -40,5 +45,22 @@ class AttendanceRequest extends Model
     public function getRequestStatusLabelAttribute()
     {
         return self::REQUEST_STATUS[$this->request_status] ?? '不明';
+    }
+
+    public static function getLatestPendingByAttendance(Attendance $attendance)
+    {
+        return self::where('attendance_id', $attendance->id)
+            ->where('request_status', self::REQUEST_STATUS_PENDING)
+            ->latest()
+            ->first();
+    }
+
+    public static function getLatestPendingByUserAndDate(int $userId, string $date)
+    {
+        return self::where('user_id', $userId)
+            ->where('request_day', $date)
+            ->where('request_status', self::REQUEST_STATUS_PENDING)
+            ->latest()
+            ->first();
     }
 }

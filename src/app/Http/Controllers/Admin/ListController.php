@@ -61,31 +61,46 @@ class ListController extends Controller
         return redirect()->route('admin.attendance.list.form');
     }
 
+    public function adminPrepareDetail(Request $request)
+    {
+        session([
+            'attendance_date' => $request->input('date'),
+        ]);
+
+        $id = $request->input('attendance_id');
+
+        return redirect()->route('admin.attendance.detail.form', $id ? ['id' => $id] : []);
+    }
+
     public function adminAttendanceDetailForm(Request $request, $id = null)
     {
+        $attendanceDate = session('attendance_date');
+
+        if (!$attendanceDate) {
+            return redirect()->route('admin.attendance.list.form');
+        }
+
+        $date = Carbon::parse($attendanceDate);
+
         $attendance = null;
         $attendanceRequest = null;
         $breakRecords = collect();
 
-        $date = Carbon::parse($request->query('date'));
-
-        if ($id) {
-            $attendance = Attendance::with(['breakRecords', 'user'])->find($id);
+        if ($id !== null) {
+            $attendance = Attendance::with('breakRecords', 'user')->find($id);
 
             if ($attendance) {
-                $breakRecords = $attendance->breakRecords;
                 $attendanceRequest = AttendanceRequest::where('attendance_id', $attendance->id)
                     ->where('request_status', AttendanceRequest::REQUEST_STATUS_PENDING)
-                    ->latest()
+                    ->latest('id')
                     ->first();
+                $breakRecords = $attendance->breakRecords;
             }
         } else {
-            $attendanceRequest = AttendanceRequest::whereNull('attendance_id')
-                ->where('request_day', $date->toDateString())
-                ->where('request_status', AttendanceRequest::REQUEST_STATUS_PENDING)
-                ->latest()
-                ->first();
+            $attendanceRequest = null;
         }
+
+        $user = $attendance?->user ?? auth()->user();
 
         $canEdit = !(
             $attendanceRequest && $attendanceRequest->request_status === AttendanceRequest::REQUEST_STATUS_PENDING
@@ -93,23 +108,18 @@ class ListController extends Controller
 
         $breakRows = [];
         $total = $breakRecords->count();
-
         if ($canEdit) {
             $total += 1;
         }
 
         for ($i = 0; $i < $total; $i++) {
-            $break = $breakRecords->get($i);
-
             $breakRows[] = [
                 'index' => $i,
                 'label' => $i === 0 ? '休憩' : '休憩' . ($i + 1),
-                'start' => $break?->start_hm ?? '',
-                'end' => $break?->end_hm ?? '',
+                'start' => $breakRecords[$i]->start_hm ?? '',
+                'end' => $breakRecords[$i]->end_hm ?? '',
             ];
         }
-
-        $user = $attendance?->user;
 
         return view('admin.attendance_detail', compact(
             'user',

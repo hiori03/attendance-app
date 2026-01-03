@@ -54,9 +54,14 @@
                     {{ $day['attendance']?->total_work_time_hm ?? '' }}
                 </td>
                 <td class="detail_td">
-                    <a href="{{ route('admin.attendance.detail.form', ['id' => $day['attendance']->id]) }}" class="detail_button">
-                        詳細
-                    </a>
+                    <form method="POST" action="{{ route('admin.attendance.detail.prepare') }}">
+                        @csrf
+                        @if($day['attendance'])
+                        <input type="hidden" name="attendance_id" value="{{ $day['attendance']->id }}">
+                        @endif
+                        <input type="hidden" name="date" value="{{ $day['date']->toDateString() }}">
+                        <button type="submit" class="detail_button">詳細</button>
+                    </form>
                 </td>
             </tr>
             @endforeach

@@ -92,7 +92,7 @@ class ListController extends Controller
         $breakRecords = collect();
         $attendanceRequest = null;
 
-        if ($id !== null ) {
+        if (!is_null($id)) {
             $attendance = Attendance::with('breakRecords')->find($id);
 
             if ($attendance) {

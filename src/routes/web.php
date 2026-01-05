@@ -24,6 +24,9 @@ Route::get('/login', [AuthController::class, 'loginForm'])->name('login.form');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::get('/admin/login', [AuthController::class, 'adminLoginForm'])->name('admin.login.form');
+Route::post('/admin/login', [AuthController::class, 'adminLogin'])->name('admin.login');
+
 Route::get('/email', [AuthController::class, 'emailForm'])->name('email');
 Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'certification'])->middleware(['signed'])->name('email.certification');
 Route::post('/email/resend', [AuthController::class, 'resend'])->name('email.resend');

@@ -78,6 +78,31 @@ class AuthController extends Controller
         return redirect()->route('login');
     }
 
+    public function adminLoginForm()
+    {
+        return view('admin.login');
+    }
+
+    public function adminLogin(LoginRequest $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        $user = User::where('email', $credentials['email'])->first();
+
+        if (! $user || ! Hash::check($credentials['password'], $user->password)) {
+            return back()->withErrors(['email' => 'ログイン情報が登録されていません'])->withInput();
+        }
+
+        if ($user->role !== User::ROLE_ADMIN) {
+            return back()->withErrors(['email' => '管理者ユーザーではありません'])->withInput();
+        }
+
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return redirect()->route('admin.attendance.list.form');
+    }
+
     public function emailForm()
     {
         $userId = session('unverified_user_id');

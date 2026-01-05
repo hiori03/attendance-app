@@ -26,6 +26,9 @@ class User extends Authenticatable
         'email_verified_at',
     ];
 
+    public const ROLE_USER  = 'user';
+    public const ROLE_ADMIN = 'admin';
+
     /**
      * The attributes that should be hidden for serialization.
      *

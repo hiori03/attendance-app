@@ -21,7 +21,7 @@
             <a class="header_link" href="{{ route('admin.attendance.list.form') }}">勤怠一覧</a>
             <a class="header_link" href="{{ route('admin.staff.list.form') }}">スタッフ一覧</a>
             <a class="header_link" href="{{ route('stamp_correction_request.form') }}">申請一覧</a>
-            <form class="header_logout-form" action="{{ route('logout') }}" method="POST">
+            <form class="header_logout-form" action="{{ route('admin.logout') }}" method="POST">
                 @csrf
                 <button class="header_logout">ログアウト</button>
             </form>

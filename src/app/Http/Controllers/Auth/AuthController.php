@@ -93,7 +93,7 @@ class AuthController extends Controller
             return back()->withErrors(['email' => 'ログイン情報が登録されていません'])->withInput();
         }
 
-        if ($user->role !== 'admin') {
+        if ($user->role !== User::ROLE_ADMIN) {
             return back()->withErrors(['email' => '管理者ユーザーではありません'])->withInput();
         }
 

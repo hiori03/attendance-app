@@ -168,7 +168,8 @@
 .detail_button {
     font-size: 15px;
     color: #000;
-    text-decoration: none;
+    border: none;
+    background-color: #fff;
 }
 
 @media screen and (max-width: 1024px) {

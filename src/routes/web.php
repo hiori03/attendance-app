@@ -36,12 +36,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/attendance/list', [AdminListController::class, 'attendanceListForm'])->name('admin.attendance.list.form');
     Route::post('/admin/attendance/list/change', [AdminListController::class, 'changeDay'])->name('attendance.list.changeDay');
 
-    Route::get('/admin/attendance/detail/{id}', [AdminListController::class, 'adminAttendanceDetailForm'])->name('admin.attendance.detail.form');
+    Route::post('/admin/attendance/detail/prepare', [AdminListController::class, 'adminPrepareDetail'])->name('admin.attendance.detail.prepare');
+    Route::get('/admin/attendance/detail/{id?}', [AdminListController::class, 'adminAttendanceDetailForm'])->name('admin.attendance.detail.form');
     Route::post('/admin/attendance/detail/request', [AdminListController::class, 'adminDetailRequest'])->name('admin.attendance.detail.request');
 
     Route::get('/admin/staff/list', [AdminListController::class, 'staffListForm'])->name('admin.staff.list.form');
 
-    Route::get('/admin/attendance/staff/{id}', [AdminListController::class, 'atttendanceStaffForm'])->name('admin.attendance.staff.form');
+    Route::get('/admin/attendance/staff/{id}', [AdminListController::class, 'adminAtttendanceStaffForm'])->name('admin.attendance.staff.form');
+    Route::post('/admin/attendance/staff/{id}/change', [AdminListController::class, 'adminChangeMonth'])->name('admin.attendance.staff.changeMonth');
+    Route::get('/admin/attendance/export', [AdminListController::class, 'export'])->name('admin.attendance.export');
 
     Route::get('/attendance', [AttendanceController::class, 'attendanceForm'])->name('attendance.form');
     Route::post('/attendance/start', [AttendanceController::class, 'attendanceStart'])->name('attendance.start');

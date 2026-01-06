@@ -7,13 +7,11 @@
 <div class="content">
     <h2 class="page_title">申請一覧</h2>
     <div class="tab_div">
-        <a href="{{ route('stamp_correction_request.form', ['status' => 'pending']) }}"
-            class="tab {{ $status === 'pending' ? 'active' : '' }}">
-            承認待ち
+        <a href="{{ route('stamp_correction_request.form', ['status' => \App\Models\AttendanceRequest::REQUEST_STATUS_PENDING]) }}" class="tab {{ (int)$status === \App\Models\AttendanceRequest::REQUEST_STATUS_PENDING ? 'active' : '' }}">
+            {{ \App\Models\AttendanceRequest::REQUEST_STATUS[\App\Models\AttendanceRequest::REQUEST_STATUS_PENDING] }}
         </a>
-        <a href="{{ route('stamp_correction_request.form', ['status' => 'approved']) }}"
-            class="tab {{ $status === 'approved' ? 'active' : '' }}">
-            承認済み
+        <a href="{{ route('stamp_correction_request.form', ['status' => \App\Models\AttendanceRequest::REQUEST_STATUS_APPROVED]) }}" class="tab {{ (int)$status === \App\Models\AttendanceRequest::REQUEST_STATUS_APPROVED ? 'active' : '' }}">
+            {{ \App\Models\AttendanceRequest::REQUEST_STATUS[\App\Models\AttendanceRequest::REQUEST_STATUS_APPROVED] }}
         </a>
     </div>
     <div class="table_div">
@@ -46,7 +44,7 @@
                 <td class="detail_td">
                     <form method="POST" action="{{ route('attendance.detail.prepare') }}">
                         @csrf
-                        <input type="hidden" name="attendance_id" value="{{ $request->attendance_id ?? 0 }}">
+                        <input type="hidden" name="attendance_id" value="{{ $request->attendance_id }}">
                         <input type="hidden" name="date" value="{{ $request->request_day }}">
                         <button type="submit" class="detail_button">詳細</button>
                     </form>

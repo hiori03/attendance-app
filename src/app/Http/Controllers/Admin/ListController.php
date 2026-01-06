@@ -18,15 +18,10 @@ class ListController extends Controller
 
         $displayDay = $carbonDay->format('Y/m/d');
 
-        $attendances = Attendance::with('user')
-            ->whereDate('day', $carbonDay)
-            ->get()
+        $attendances = Attendance::getByDay($carbonDay)
             ->keyBy('user_id');
 
-        $days = Attendance::with('user')
-            ->whereDate('day', $carbonDay)
-            ->orderBy('work_start')
-            ->get()
+        $days = Attendance::getByDayOrderByWorkStart($carbonDay)
             ->map(function ($attendance) use ($carbonDay) {
                 return [
                     'date'       => $carbonDay,

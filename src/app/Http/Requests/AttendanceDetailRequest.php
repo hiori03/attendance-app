@@ -59,12 +59,8 @@ class AttendanceDetailRequest extends FormRequest
                 return;
             }
 
-            try {
                 $workStart = Carbon::createFromFormat('H:i', $this->work_start);
                 $workEnd   = Carbon::createFromFormat('H:i', $this->work_end);
-            } catch (\Exception $e) {
-                return;
-            }
 
             if ($workStart->gt($workEnd)) {
                 $validator->errors()->add(
@@ -82,11 +78,7 @@ class AttendanceDetailRequest extends FormRequest
                     continue;
                 }
 
-                try {
-                    $breakStart = Carbon::createFromFormat('H:i', $break['start']);
-                } catch (\Exception $e) {
-                    continue;
-                }
+                $breakStart = Carbon::createFromFormat('H:i', $break['start']);
 
                 if ($breakStart->lt($workStart) || $breakStart->gt($workEnd)) {
                     $validator->errors()->add(
@@ -99,11 +91,7 @@ class AttendanceDetailRequest extends FormRequest
                     !empty($break['end']) &&
                     !$validator->errors()->has("breaks.$index.end")
                 ) {
-                    try {
-                        $breakEnd = Carbon::createFromFormat('H:i', $break['end']);
-                    } catch (\Exception $e) {
-                        continue;
-                    }
+                    $breakEnd = Carbon::createFromFormat('H:i', $break['end']);
 
                     if ($breakStart->gt($breakEnd)) {
                         $validator->errors()->add(

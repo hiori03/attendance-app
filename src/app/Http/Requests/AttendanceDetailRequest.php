@@ -83,7 +83,7 @@ class AttendanceDetailRequest extends FormRequest
                 if ($breakStart->lt($workStart) || $breakStart->gt($workEnd)) {
                     $validator->errors()->add(
                         "breaks.$index.start",
-                        '休憩時間が不適切な値です'
+                        '休憩時間が勤務時間外です'
                     );
                 }
 
@@ -104,7 +104,7 @@ class AttendanceDetailRequest extends FormRequest
                     if ($breakEnd->gt($workEnd)) {
                         $validator->errors()->add(
                             "breaks.$index.end",
-                            '休憩時間もしくは退勤時間が不適切な値です'
+                            '休憩時間が勤務時間外です'
                         );
                     }
                 }

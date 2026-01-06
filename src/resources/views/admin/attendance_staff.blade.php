@@ -57,8 +57,9 @@
                     <form method="POST" action="{{ route('admin.attendance.detail.prepare') }}">
                         @csrf
                         @if($day['attendance'])
-                        <input type="hidden" name="attendance_id" value="{{ $day['attendance']->id }}">
+                            <input type="hidden" name="attendance_id" value="{{ $day['attendance']->id }}">
                         @endif
+                        <input type="hidden" name="user_id" value="{{ $user->id }}">
                         <input type="hidden" name="date" value="{{ $day['date']->toDateString() }}">
                         <button type="submit" class="detail_button">詳細</button>
                     </form>
@@ -66,6 +67,13 @@
             </tr>
             @endforeach
         </table>
+    </div>
+    <div class="csv_div">
+        <form method="GET" action="{{ route('admin.attendance.export') }}">
+            <input type="hidden" name="user_id" value="{{ $user->id }}">
+            <input type="hidden" name="month" value="{{ session('attendance_month') }}">
+            <button type="submit" class="csv_button">CSV出力</button>
+        </form>
     </div>
 </div>
 @endsection

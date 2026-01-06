@@ -171,6 +171,20 @@
     background-color: #fff;
 }
 
+.csv_div {
+    margin-top: 40px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.csv_button {
+    font-size: 16px;
+    color: #fff;
+    background-color: #000;
+    border-radius: 5px;
+    padding: 6px 36px;
+}
+
 @media screen and (max-width: 1024px) {
     .page_title {
         font-size: 20px;

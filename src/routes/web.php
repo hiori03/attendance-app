@@ -34,6 +34,10 @@ Route::post('/email/resend', [AuthController::class, 'resend'])->name('email.res
 
 Route::middleware('auth')->group(function () {
     Route::get('/admin/attendance/list', [AdminListController::class, 'attendanceListForm'])->name('admin.attendance.list.form');
+    Route::post('/admin/attendance/list/change', [AdminListController::class, 'changeDay'])->name('attendance.list.changeDay');
+
+    Route::get('/admin/attendance/detail/{id}', [AdminListController::class, 'adminAttendanceDetailForm'])->name('admin.attendance.detail.form');
+
     Route::get('/admin/staff/list', [AdminListController::class, 'staffListForm'])->name('admin.staff.list.form');
 
     Route::get('/attendance', [AttendanceController::class, 'attendanceForm'])->name('attendance.form');

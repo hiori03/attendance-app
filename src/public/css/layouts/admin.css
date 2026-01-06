@@ -1,3 +1,8 @@
+.page_color {
+    min-height: 100vh;
+    background: #f0eff2;
+}
+
 .header {
     margin: 0 auto;
     background-color: #000;

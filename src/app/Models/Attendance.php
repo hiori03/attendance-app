@@ -7,6 +7,7 @@ use App\Models\BreakRecord;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class Attendance extends Model
 {
@@ -123,5 +124,20 @@ class Attendance extends Model
             ->whereBetween('day', [$start, $end])
             ->get()
             ->keyBy('day');
+    }
+
+    public static function getByDay(Carbon $day): Collection
+    {
+        return self::with('user')
+            ->whereDate('day', $day)
+            ->get();
+    }
+
+    public static function getByDayOrderByWorkStart(Carbon $day): Collection
+    {
+        return self::with('user')
+            ->whereDate('day', $day)
+            ->orderBy('work_start')
+            ->get();
     }
 }

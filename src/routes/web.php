@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ListController as AdminListController;
+use App\Http\Controllers\Admin\RequestController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Staff\AttendanceController;
 use App\Http\Controllers\Staff\ListController as StaffListController;
@@ -66,4 +67,7 @@ Route::middleware('auth')->group(function () {
         return app($controller)->requestForm($request);
 
     })->name('stamp_correction_request.form');
+
+    Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', [RequestController::class, 'requestApproveForm'])->name('stamp_correction_request.approve.form');
+    Route::post('/stamp_correction_request/approve/{attendance_correct_request_id}/confirmation', [RequestController::class, 'approveConfirmation'])->name('stamp_correction_request.approve.confirmation');
 });

@@ -33,7 +33,7 @@
                     {{ $request->user->name }}
                 </td>
                 <td class="tag_td">
-                    {{ $request->request_day }}
+                    {{ $request->formatted_request_day }}
                 </td>
                 <td class="tag_td ellipsis">
                     {{ $request->text }}

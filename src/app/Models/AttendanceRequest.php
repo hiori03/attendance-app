@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -42,9 +43,28 @@ class AttendanceRequest extends Model
         return $this->hasMany(BreakRequest::class);
     }
 
+    public function getNewWorkStartHmAttribute()
+    {
+        return $this->new_work_start
+            ? Carbon::parse($this->new_work_start)->format('H:i')
+            : '';
+    }
+
+    public function getNewWorkEndHmAttribute()
+    {
+        return $this->new_work_end
+            ? Carbon::parse($this->new_work_end)->format('H:i')
+            : '';
+    }
+
     public function getRequestStatusLabelAttribute()
     {
         return self::REQUEST_STATUS[$this->request_status] ?? '不明';
+    }
+
+    public function getFormattedRequestDayAttribute()
+    {
+        return \Carbon\Carbon::parse($this->request_day)->format('Y/n/j');
     }
 
     public static function getLatestPendingByAttendance(Attendance $attendance)

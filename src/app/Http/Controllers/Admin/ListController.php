@@ -29,7 +29,7 @@ class ListController extends Controller
         $days = Attendance::getByDayOrderByWorkStart($carbonDay)
             ->map(function ($attendance) use ($carbonDay) {
                 return [
-                    'date'       => $carbonDay,
+                    'date' => $carbonDay,
                     'attendance' => $attendance,
                 ];
             });
@@ -187,7 +187,7 @@ class ListController extends Controller
         $carbonMonth = Carbon::createFromFormat('Y-m', $month);
 
         $startOfMonth = $carbonMonth->copy()->startOfMonth();
-        $endOfMonth   = $carbonMonth->copy()->endOfMonth();
+        $endOfMonth = $carbonMonth->copy()->endOfMonth();
 
         $displayMonth = $startOfMonth->format('Y/m');
 
@@ -202,7 +202,7 @@ class ListController extends Controller
 
         while ($date <= $endOfMonth) {
             $days[] = [
-                'date'       => $date->copy(),
+                'date' => $date->copy(),
                 'attendance' => $attendances[$date->toDateString()] ?? null,
             ];
             $date->addDay();
@@ -244,7 +244,7 @@ class ListController extends Controller
         $fileName = "{$user->name}_勤怠_{$start->format('Y_m')}.csv";
 
         $headers = [
-            'Content-Type'        => 'application/octet-stream',
+            'Content-Type' => 'application/octet-stream',
             'Content-Disposition' => "attachment; filename*=UTF-8''" . rawurlencode($fileName),
         ];
 

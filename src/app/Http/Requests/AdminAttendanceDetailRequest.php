@@ -26,9 +26,9 @@ class AdminAttendanceDetailRequest extends FormRequest
     {
         return [
             'work_start' => 'required|date_format:H:i',
-            'work_end'   => 'required|date_format:H:i',
+            'work_end' => 'required|date_format:H:i',
             'breaks.*.start' => 'nullable|date_format:H:i',
-            'breaks.*.end'   => 'nullable|date_format:H:i',
+            'breaks.*.end' => 'nullable|date_format:H:i',
             'text' => 'required',
         ];
     }
@@ -37,11 +37,11 @@ class AdminAttendanceDetailRequest extends FormRequest
     {
         return [
             'work_start.required' => '出勤時間を入力してください',
-            'work_end.required'   => '退勤時間を入力してください',
+            'work_end.required' => '退勤時間を入力してください',
             'work_start.date_format' => '時間は HH:MM 形式で入力してください',
-            'work_end.date_format'   => '時間は HH:MM 形式で入力してください',
+            'work_end.date_format' => '時間は HH:MM 形式で入力してください',
             'breaks.*.start.date_format' => '時間は HH:MM 形式で入力してください',
-            'breaks.*.end.date_format'   => '時間は HH:MM 形式で入力してください',
+            'breaks.*.end.date_format' => '時間は HH:MM 形式で入力してください',
             'text.required' => '備考を記入してください',
         ];
     }
@@ -60,7 +60,7 @@ class AdminAttendanceDetailRequest extends FormRequest
             }
 
             $workStart = Carbon::createFromFormat('H:i', $this->work_start);
-            $workEnd   = Carbon::createFromFormat('H:i', $this->work_end);
+            $workEnd = Carbon::createFromFormat('H:i', $this->work_end);
 
             if ($workStart->gt($workEnd)) {
                 $validator->errors()->add(

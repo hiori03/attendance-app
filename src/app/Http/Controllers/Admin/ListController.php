@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AttendanceDetailRequest;
+use App\Http\Requests\AdminAttendanceDetailRequest;
 use App\Models\Attendance;
 use App\Models\AttendanceRequest;
 use App\Models\User;
@@ -129,7 +129,7 @@ class ListController extends Controller
         ));
     }
 
-    public function adminDetailRequest(AttendanceDetailRequest $request)
+    public function adminDetailRequest(AdminAttendanceDetailRequest $request)
     {
         $attendance = DB::transaction(function () use ($request) {
             if ($request->filled('attendance_id')) {

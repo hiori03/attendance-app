@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
-class AttendanceDetailRequest extends FormRequest
+class AdminAttendanceDetailRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -59,13 +59,13 @@ class AttendanceDetailRequest extends FormRequest
                 return;
             }
 
-                $workStart = Carbon::createFromFormat('H:i', $this->work_start);
-                $workEnd   = Carbon::createFromFormat('H:i', $this->work_end);
+            $workStart = Carbon::createFromFormat('H:i', $this->work_start);
+            $workEnd   = Carbon::createFromFormat('H:i', $this->work_end);
 
             if ($workStart->gt($workEnd)) {
                 $validator->errors()->add(
                     'work_start',
-                    '出勤時間が不適切な値です'
+                    '出勤時間もしくは退勤時間が不適切な値です'
                 );
             }
 

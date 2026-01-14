@@ -97,7 +97,7 @@
 .status_td {
     width: 18%;
     text-align: center;
-    padding: 12px 0 12px 20px;
+    padding: 16px 0 16px 20px;
 }
 
 .name_td {
@@ -113,7 +113,7 @@
 .detail_td {
     font-weight: 600;
     width: 9%;
-    padding: 12px 50px 12px 0;
+    padding: 16px 50px 16px 0;
 }
 
 .ellipsis {
@@ -123,10 +123,12 @@
 }
 
 .detail_button {
+    all: unset;
     font-size: 15px;
     color: #000;
     border: none;
     background-color: #fff;
+    font-weight: 400;
 }
 
 @media screen and (max-width: 1024px) {

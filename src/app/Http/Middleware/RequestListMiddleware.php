@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Admin\ListController as AdminListController;
+use App\Http\Controllers\Admin\RequestController;
 use App\Http\Controllers\Staff\ListController as StaffListController;
 
 class RequestListMiddleware
@@ -21,7 +21,7 @@ class RequestListMiddleware
         $user = auth()->user();
 
         if ($user->role === 'admin') {
-            $request->merge(['controller' => AdminListController::class]);
+            $request->merge(['controller' => RequestController::class]);
         } else {
             $request->merge(['controller' => StaffListController::class]);
         }

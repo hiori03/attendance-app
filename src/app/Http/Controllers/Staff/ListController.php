@@ -96,6 +96,7 @@ class ListController extends Controller
             $attendance = Attendance::with('breakRecords')->find($id);
 
             if ($attendance) {
+                $breakRecords = $attendance->breakRecords;
                 $attendanceRequest = AttendanceRequest::getLatestPendingByAttendance($attendance);
             }
         } else {
@@ -168,17 +169,15 @@ class ListController extends Controller
 
     public function requestForm(Request $request)
     {
-        $status = $request->query('status', 'pending');
+        $status = (int) $request->query(
+            'status',
+            AttendanceRequest::REQUEST_STATUS_PENDING
+        );
 
-        $query = AttendanceRequest::query();
-
-        if ($status === 'approved') {
-            $query->where('request_status', AttendanceRequest::REQUEST_STATUS_APPROVED);
-        } else {
-            $query->where('request_status', AttendanceRequest::REQUEST_STATUS_PENDING);
-        }
-
-        $requests = $query->get();
+        $requests = AttendanceRequest::where('user_id', auth()->id())
+            ->where('request_status', $status)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('staff.request',compact('requests', 'status'));
     }

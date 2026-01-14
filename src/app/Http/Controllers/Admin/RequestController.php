@@ -59,7 +59,7 @@ class RequestController extends Controller
                 'index' => $index,
                 'label' => '休憩' . ($index + 1),
                 'start' => $br->new_break_start_hm,
-                'end'   => $br->new_break_end_hm,
+                'end' => $br->new_break_end_hm,
             ];
         });
 
@@ -87,14 +87,14 @@ class RequestController extends Controller
 
                 $attendance->update([
                     'work_start' => $attendanceRequest->new_work_start,
-                    'work_end'   => $attendanceRequest->new_work_end,
+                    'work_end' => $attendanceRequest->new_work_end,
                 ]);
             } else {
                 $attendance = Attendance::create([
-                    'user_id'    => $request->user_id,
-                    'day'        => $request->date,
+                    'user_id' => $request->user_id,
+                    'day' => $request->date,
                     'work_start' => $attendanceRequest->new_work_start,
-                    'work_end'   => $attendanceRequest->new_work_end,
+                    'work_end' => $attendanceRequest->new_work_end,
                 ]);
             }
 

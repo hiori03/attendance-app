@@ -12,14 +12,14 @@
             <p class="content_form-text">メールアドレス</p>
             <input class="content_form-input" type="text" name="email" value="{{ old('email') }}">
             @error('email')
-            <p class="error_message">{{ $message }}</p>
+                <p class="error_message">{{ $message }}</p>
             @enderror
         </div>
         <div class="content_form">
             <p class="content_form-text">パスワード</p>
             <input class="content_form-input" type="password" name="password">
             @error('password')
-            <p class="error_message">{{ $message }}</p>
+                <p class="error_message">{{ $message }}</p>
             @enderror
         </div>
         <button class="content_form-button">管理者ログインする</button>

@@ -34,7 +34,7 @@ class ListController extends Controller
 
         while ($date <= $endOfMonth) {
             $days[] = [
-                'date'       => $date->copy(),
+                'date' => $date->copy(),
                 'attendance' => $attendances[$date->toDateString()] ?? null,
             ];
             $date->addDay();
